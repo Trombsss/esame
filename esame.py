@@ -16,7 +16,7 @@ class CSVTimeSeriesFile:
 
         # Setto il nome del file
         self.name = name
-    
+
     def get_data(self):
 
         # Provo ad aprirlo e leggere una riga
@@ -37,7 +37,7 @@ class CSVTimeSeriesFile:
 
                 # Leggo il file linea per linea
                 for line in my_file:
-                    
+
                     # print('---')
                     # linea csv
                     # print(line)
@@ -53,11 +53,11 @@ class CSVTimeSeriesFile:
                     # print('\t', elements[1])
 
                     if elements[0] != 'date':
-                        
+
                         # el sarà la lista dove splitterò separatamente anno e mese
                         el = []
                         el = elements[0].split('-')
-                        
+
                         # controllo che le linee del file sia norme alle condizioni
                         try:
 
@@ -66,19 +66,21 @@ class CSVTimeSeriesFile:
                             int(el[1])
                             int(elements[1])
 
-                            # controllo che la stringa sia formata da sole cifre 
+                            # controllo che la stringa sia formata da sole cifre
                             # numeriche, altrimenti alzo un ExamException
                             if fail_lung(elements) is not True:
                                 raise ExamException('Stringa non conforme: errore di dimensione data')
 
                             # controllo che la riga non abbia valori negativi
-                            if int(el[0]) <= 0 or int(el[1]) <= 0 or int(elements[1]) <= 0:
+                            if int(el[0]) <= 0 or int(el[1]) <= 0 or int(
+                                    elements[1]) <= 0:
                                 raise ExamException('Valore negativo non accettato')
 
-                        # uso una Exception per poter bypassare il problema e non 
+                        # uso una Exception per poter bypassare il problema e non
                         # stoppare il programma alla prima riga errata
                         except Exception as erroreRiga:
-                            print('Stringa non conforme: "{}"'.format(erroreRiga))
+                            print('Stringa non conforme: "{}"'.format(
+                                erroreRiga))
                             pass
                         else:
                             # Posso anche pulire il carattere di newline
@@ -90,16 +92,14 @@ class CSVTimeSeriesFile:
 
                             # isalpha controlla se la stringa contiene delle lettere
                             if elements[0].isalpha() is not True:
-                                
-                                
+
                                 # Aggiungo alla lista gli elementi di questa linea
                                 # elements[1] = int(elements[1])
                                 data.append(elements)
-                                
-                
+
                 # controllo che la il file sia ordinato
                 ordinato(data)
-                
+
                 # Quando ho processato tutte le righe, ritorno i dati
                 return data
 
@@ -116,7 +116,6 @@ def fail_lung(el):
 # e che non abbia ripetizioni
 def ordinato(time_series):
 
-    
     # creo una flag per controllare che quello analizzato non sia il primo elemento
     # ovvero per creare una variabile save ove salvare la prima data
     # per poi confrontarla con il resto
@@ -127,12 +126,12 @@ def ordinato(time_series):
 
         # controllo di non star lavorando su una stringa
         if elements[0].isalpha() is False:
-            
+
             # splitto gli elementi per avere i valori che mi interessano
-            # ovvero anno e mese  
+            # ovvero anno e mese
 
             data = str(elements[0])
-            
+
             anno_mese = []
 
             # anno_mese deve essere una lista per poter accedere
@@ -143,18 +142,18 @@ def ordinato(time_series):
             # anno_mese[0] = anno
             # anno_mese[1] = mese
 
-            # se la flag è falsa allora non entra nel ciclo, poichè 
+            # se la flag è falsa allora non entra nel ciclo, poichè
             # le variabili non sono state ancora instanziate
             # non si potrebbe paragonare il vecchio con il nuovo
             if flag is True:
 
-                # per poter fare calcoli usando queste variabili devo 
+                # per poter fare calcoli usando queste variabili devo
                 # metterle sotto forma di int
                 oldA = int(oldA)
                 newA = int(anno_mese[0])
                 oldM = int(oldM)
                 newM = int(anno_mese[1])
-    
+
                 #print('---')
                 #print('\t', oldA)
                 #print('\t\t', newA)
@@ -168,8 +167,8 @@ def ordinato(time_series):
 
                 # se la differenza tra gli anni è minore di 0 (1950-1951 = -1)
                 # allora entro nell'if
-                if ra<=0:
-                    # setto il vecchio anno come l'anno corrente per poi 
+                if ra <= 0:
+                    # setto il vecchio anno come l'anno corrente per poi
                     # paragonarlo al prossimo
                     oldA = newA
 
@@ -177,14 +176,14 @@ def ordinato(time_series):
                     # ancona nello stesso anno
                     # quindi passo al controllo dei mesi
                     if ra == 0:
-                        
-                        # se la differenza tra i mesi è di 0, allora 
+
+                        # se la differenza tra i mesi è di 0, allora
                         # significa che gli elementi si ripetono
                         # (due mesi uguali => 10-10 = 0)
                         if rm == 0:
                             raise ExamException('Elementi si ripetono nel file')
 
-                        # se la differenza tra i mesi è > di 0, allora 
+                        # se la differenza tra i mesi è > di 0, allora
                         # significa che un mese viene prima dell'altro
                         # in modo non cronologico
                         # (10-8 = 2)
@@ -195,19 +194,15 @@ def ordinato(time_series):
                     oldM = newM
                 else:
                     raise ExamException('Ordine cronologico sballato: ANNO')
-                
+
             else:
-                # nel caso sia il primo ciclo, setto la 
+                # nel caso sia il primo ciclo, setto la
                 # flag a true e setto gli anni e mesi vecchi
                 flag = True
                 oldA = anno_mese[0]
                 oldM = anno_mese[1]
 
 
-    
-        
-        
-        
 # funzione per controllare che l'anno specificato esista / abbia
 # dei valori al suo interno
 def check(time_series, y):
@@ -239,15 +234,15 @@ def check(time_series, y):
 
 # funzione per controllare se l'estremo è contenuto nel file
 def inCSV(time_series, y):
-    
+
     # cast y per assicurarmi di poterlo paragonare a anno_mese[0] che è una string
     y = str(y)
     anno_mese = []
-    
+
     for elements in time_series:
 
         data = str(elements[0])
-        
+
         # print(data)
         # casto le righe in stringhe
         data = str(elements[0])
@@ -258,10 +253,10 @@ def inCSV(time_series, y):
 
         # se l'anno specificato e il mese corrispondono, procedo con la verifica
         if y == anno_mese[0]:
-                return True
+            return True
 
-   
     raise ExamException
+
 
 # creo una funzione che riconosca i mesi in uno specifico anno e faccia la media dei
 # corrispettivi valori
@@ -342,13 +337,15 @@ def compute_increments(time_series, first_year, last_year):
         first_year = int(first_year)
         last_year = int(last_year)
     except ExamException as nonInt:
-        print('I valori inseriti non sono numeri"{}"'.format(nonInt))
+        raise ExamException ('I valori inseriti non sono numeri') from None
+        #print('I valori inseriti non sono numeri"{}"'.format(nonInt))
     try:
 
         inCSV(time_series, first_year)
         inCSV(time_series, last_year)
     except ExamException as annoCompreso:
-        print('l\'anno da lei selezionato non esiste nel file"{}"'.format(annoCompreso))
+        raise ExamException ('l\'anno da lei selezionato non esiste nel file') from None
+        #print('l\'anno da lei selezionato non esiste nel file"{}"'.format(annoCompreso))
     else:
         # creo la differenza tra i due anni per vedere quanti cicli dover fare nel for
         diff = first_year - last_year
@@ -419,13 +416,13 @@ def compute_increments(time_series, first_year, last_year):
 #  Esempio di utilizzo
 #==============================
 
-mio_file = CSVTimeSeriesFile(name='esame/taad.csv')
-time_series = mio_file.get_data()
-compute_increments(time_series, '1948', '1956')
+#mio_file = CSVTimeSeriesFile(name='esame/taad.csv')
+#time_series = mio_file.get_data()
+
 #print()
 
-#print(confronta(time_series, 1950, 1951))
-#print(compute_increments(time_series, '1948', '1956'))
+#print(confronta(time_series, 1950, 1953))
+#print(compute_increments(time_series, '1949', '1955'))
 #print(spezzaYear(time_series, 1950))
 #print(check(time_series, 1949))
 #print(inCSV(time_series, 1950))
