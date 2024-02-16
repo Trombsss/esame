@@ -421,11 +421,11 @@ def compute_increments(time_series, first_year, last_year):
 
 mio_file = CSVTimeSeriesFile(name='esame/taad.csv')
 time_series = mio_file.get_data()
-
-print()
+compute_increments(time_series, '1948', '1956')
+#print()
 
 #print(confronta(time_series, 1950, 1951))
-print(compute_increments(time_series, '1948', '1956'))
+#print(compute_increments(time_series, '1948', '1956'))
 #print(spezzaYear(time_series, 1950))
 #print(check(time_series, 1949))
 #print(inCSV(time_series, 1950))
