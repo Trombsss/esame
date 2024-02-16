@@ -290,9 +290,7 @@ def year(time_series, y):
             mesi.append(anno_mese[1])
 
             # se esiste l'anno e il mese, ma manca il valore, inserisco come valore 0
-            if element[1] is None:
-                valori.append(0)
-            else:
+            if element[1] is not None:
                 valori.append(element[1])
 
     # c è la lunghezza del vettore mesi
@@ -422,7 +420,7 @@ def compute_increments(time_series, first_year, last_year):
 #print()
 
 #print(confronta(time_series, 1950, 1953))
-#print(compute_increments(time_series, '1949', '1955'))
+#print(compute_increments(time_series, '1948', '1955'))
 #print(spezzaYear(time_series, 1950))
 #print(check(time_series, 1949))
 #print(inCSV(time_series, 1950))
